@@ -6,10 +6,11 @@ import matplotlib.pyplot as plt
 RESTORE_SAVED_MODEL = False
 SAVE_MODEL = True
 
-base_path = "YOU_PATH_HERE"
+base_path = "YOU_PATH_HERE" # The folder where you data is stored.
 
 data = []
 
+# Mounting training data from base_path.
 for i in range(503):
 	path = base_path + str(i) + '.png'
 	
@@ -22,15 +23,19 @@ for i in range(503):
 		print("err")
 		continue
 
+# This function is used to provide the generator some random input.
 def noise(batch_size):
     return np.random.uniform(-1, 1, (batch_size, 100))
 
+# Hyper Parameters.
 learning_rate = 0.001
 batch_size = 128
 
+#Placehoders.
 input = tf.placeholder('float', [None, 100])
 real_data = tf.placeholder('float', [None, 112*112])
 
+# Generator
 def generator(x):
     weights = {
         'hl1' : tf.get_variable(name='w_hl1',shape=[100, 200],initializer=tf.contrib.layers.xavier_initializer()),
@@ -48,11 +53,11 @@ def generator(x):
     hl1 = tf.nn.leaky_relu(tf.add(tf.matmul(x, weights['hl1']), biases['hl1']))
     hl2 = tf.nn.leaky_relu(tf.add(tf.matmul(hl1, weights['hl2']), biases['hl2']))
     hl3 = tf.nn.leaky_relu(tf.add(tf.matmul(hl2, weights['hl3']), biases['hl3']))
-    ol = tf.add(tf.matmul(hl3, weights['ol']), biases['ol'])
+    ol = tf.add(tf.matmul(hl3, weights['ol']), biases['ol']) # No activation because sigmoid() is gets applied in sigmoid_cross_entropy_with_logits() later.
 
     return ol
 
-
+# Discriminator
 def discriminator(x):
     weights = {
         'hl1' : tf.get_variable(name='w_hl1',shape=[112*112, 200],initializer=tf.contrib.layers.xavier_initializer()),
@@ -70,10 +75,11 @@ def discriminator(x):
     hl1 = tf.nn.leaky_relu(tf.add(tf.matmul(x, weights['hl1']), biases['hl1']))
     hl2 = tf.nn.leaky_relu(tf.add(tf.matmul(hl1, weights['hl2']), biases['hl2']))
     hl3 = tf.nn.leaky_relu(tf.add(tf.matmul(hl2, weights['hl3']), biases['hl3']))
-    ol = tf.add(tf.matmul(hl3, weights['ol']), biases['ol'])
+    ol = tf.add(tf.matmul(hl3, weights['ol']), biases['ol']) # No activation because sigmoid() is gets applied in sigmoid_cross_entropy_with_logits() later.
     
     return ol
 
+# Variable scopes are used so we can later differentiate which weigts to use. See G_train and D_train.
 with tf.variable_scope("G"):
     G = generator(input)
 
