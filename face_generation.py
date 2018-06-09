@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 RESTORE_SAVED_MODEL = False
 SAVE_MODEL = True
 
-base_path = "E:/workspace_py/datasets/Siraj images/processed/"
+base_path = "YOU_PATH_HERE"
 
 data = []
 
@@ -102,8 +102,8 @@ saver = tf.train.Saver()
 sess.run(init)
 
 if RESTORE_SAVED_MODEL:
-	saver = tf.train.import_meta_graph("E:/workspace_py/saved_models/face_generation/r1/face_gen_gan_epochs100.ckpt.meta")
-	saver.restore(sess, tf.train.latest_checkpoint('E:/workspace_py/saved_models/face_generation/r1/'))
+	saver = tf.train.import_meta_graph("YOU_PATH_HERE")
+	saver.restore(sess, tf.train.latest_checkpoint('YOU_PATH_HERE'))
 
 
 
@@ -152,5 +152,5 @@ plt.title("G_Loss")
 plt.show()
 
 if SAVE_MODEL:
-	save_path = saver.save(sess, "E:/workspace_py/saved_models/face_generation/r1/face_gen_gan_epochs100.ckpt")
+	save_path = saver.save(sess, "YOU_PATH_HERE")
 	print("Model saved at : ", save_path)
