@@ -120,6 +120,7 @@ for epoch in range(100):
     ptr = 0
     for iteratiion in range(int(len(data)/batch_size)):
         real_batch = data[ptr : ptr + batch_size]
+	ptr += batch_size
         # real_batch = 2*real_batch - [1.]*len(real_batch)
         _, d_err = sess.run([D_train, D_total_loss], feed_dict = {real_data : real_batch, input : noise(batch_size)})
         _, g_err = sess.run([G_train, G_loss], feed_dict = {input : noise(batch_size)})
